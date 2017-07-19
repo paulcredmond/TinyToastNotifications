@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tiny Toast Notifications</title>
+	<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="#" />
+    <style>
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+        }
+
+        button {
+            padding: 7px 12px;
+            font-size: 16px;
+            margin-right: 8px;
+        }
+
+        .user-message-wrapper {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+        }
+
+        .user-message {
+            width: 250px;
+            border-radius: 3px;
+            border: 2px solid #ccc;
+            color: #292b2c;
+            background-color: #fff;
+            font-weight: 400;
+            line-height: 1.25em;
+            letter-spacing: 0.04em;
+            opacity: 1;
+            padding: 20px 20px 16px 20px;
+            margin-bottom: 8px;
+            transition: .3s all ease;    
+        }
+
+        .user-message-exit {
+            transition: .4s all ease;
+            opacity: 0;
+        }
+
+        .user-message-success {
+            color: #fff;
+            background-color: #449d44;
+            border-color: #419641;
+        }
+
+        .user-message-error {
+            color: #fff;
+            background-color: #d9534f;
+            border-color: #d9534f;
+        }
+
+        .user-message-info {
+            color: #fff;
+            background-color: #31b0d5;
+            border-color: #2aabd2;
+        }        
+    </style>
+</head>
+<body>
+
+    <h1>Tiny Toast Notifications</h1>    
+
+    <button id="success">Success</button>
+    <button id="error">Error</button>
+    <button id="info">Info</button>  
+
+    <div id="userMessages" class="user-message-wrapper"></div>  
+
+    <script>
+        /**
+        * Notify the user
+        * @param type Either 'success', 'info' or 'error'
+        * @param message The message you want to display to the user
+        * @param timeout Override the default 3 seconds to display message
+        */
+        function userMessage(type, message, timeout) {
+            timeout = timeout || 3000;
+            var newMessage = document.createElement('div');
+            var classType = 'user-message-' + type;
+            var messageContainer = document.getElementById('userMessages');
+
+            if (messageContainer) {            
+                newMessage.classList.add('user-message', classType);
+                newMessage.innerText = message;
+                messageContainer.insertBefore(newMessage, messageContainer.childNodes[0]);
+                
+                // Set timer to remove message
+                setTimeout(function() {
+                    newMessage.classList.add('user-message-exit');
+                    // When animation completes, remove             
+                    setTimeout(function() {
+                        newMessage.remove();
+                    }, 400);
+                }, timeout);
+            }
+        }
+
+        // Dom elements and handlers
+        var success = document.getElementById('success');
+        var error = document.getElementById('error');
+        var info = document.getElementById('info');
+
+        success.addEventListener('click', function() {
+        userMessage('success', 'Settings have been saved');
+        });
+
+        error.addEventListener('click', function() {
+        userMessage('error', 'You do not have permission to do that');
+        });
+
+        info.addEventListener('click', function() {
+        userMessage('info', 'Nice weather today!');
+        });
+    </script>
+	
+</body>
+</html>
